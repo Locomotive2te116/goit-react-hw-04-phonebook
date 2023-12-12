@@ -8,7 +8,7 @@ export const ContactItem = ({ name, number, id, deleteContact }) => {
       <button
         className={s.contactsBtn}
         type="button"
-        onClick={event => deleteContact(id, event)}
+        onClick={() => deleteContact(id)}
       >
         Delete
       </button>

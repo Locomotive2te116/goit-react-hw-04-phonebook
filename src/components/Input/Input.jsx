@@ -1,70 +1,73 @@
-import React from 'react';
+import { useState } from 'react';
 import { nanoid } from 'nanoid';
 import s from './Input.module.css';
-export class Input extends React.Component {
-  state = {
-    name: '',
-    number: '',
+
+export const Input = ({ contacts, updateContactState }) => {
+  const [name, setName] = useState('');
+  const [number, setNumber] = useState('');
+
+  const handleChange = event => {
+    const type = event.target.name;
+    const val = event.target.value;
+    if (type === 'name') {
+      setName(val);
+    }
+    if (type === 'number') {
+      setNumber(val);
+    }
   };
 
-  handleChange = event => {
-    this.setState({ [event.target.name]: event.target.value });
-  };
-
-  createContact = event => {
+  const createContact = event => {
     event.preventDefault();
-
-    const { name, number } = this.state;
 
     const newContact = { name, number, id: nanoid(5) };
 
-    if (this.props.contacts.some(contact => contact.name === name)) {
+    if (contacts.some(contact => contact.name === name)) {
       alert(`Contact  ${name} already in contacts!`);
       return;
     }
-    if (this.props.contacts.some(contact => contact.number === number)) {
+    if (contacts.some(contact => contact.number === number)) {
       alert(`Contact  ${number} already in contacts!`);
       return;
     }
 
-    this.props.updateContactState(newContact);
+    updateContactState(newContact);
 
-    this.setState({ name: '', number: '' });
+    setName('');
+    setNumber('');
   };
 
-  render() {
-    return (
-      <form onSubmit={this.createContact}>
-        <div className={s.styleForm}>
-          <label>
-            Name <br />
-            <input
-              className={s.win}
-              name="name"
-              value={this.state.name}
-              type="text"
-              placeholder="Enter contact name"
-              onChange={this.handleChange}
-            />
-          </label>
+  return (
+    <form onSubmit={createContact}>
+      <div className={s.styleForm}>
+        <label>
+          Name <br />
+          <input
+            className={s.win}
+            name="name"
+            value={name}
+            type="text"
+            placeholder="Enter contact name"
+            onChange={handleChange}
+          />
+        </label>
 
-          <label>
-            Number <br />
-            <input
-              className={s.win}
-              name="number"
-              value={this.state.number}
-              type="tel"
-              placeholder="Enter contact number"
-              onChange={this.handleChange}
-              required
-            />
-          </label>
-        </div>
-        <button className={s.inputbtn} type="submit">
-          Add contact
-        </button>
-      </form>
-    );
-  }
-}
+        <label>
+          Number <br />
+          <input
+            className={s.win}
+            name="number"
+            value={number}
+            type="tel"
+            placeholder="Enter contact number"
+            onChange={handleChange}
+            required
+          />
+        </label>
+      </div>
+      <button className={s.inputbtn} type="submit">
+        Add contact
+      </button>
+    </form>
+  );
+};
